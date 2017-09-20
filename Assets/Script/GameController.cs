@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
 	public RawImage platform;
 
 	public GameObject uiParado;
+	public GameObject player;
 
 	//Enumerador, lista de opciones
 	public enum GameState {Parado, Jugando};
@@ -26,6 +27,8 @@ public class GameController : MonoBehaviour {
 		if (gameState == GameState.Parado && (Input.GetKeyDown ("up") || Input.GetMouseButtonDown (0))) {
 			gameState = GameState.Jugando;
 			uiParado.SetActive (false);
+			player.SendMessage("UpdateState", "PlayerRun");
+
 
 		} else if (gameState == GameState.Jugando) {
 			Parallax ();
