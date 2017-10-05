@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GameState { Parado, Jugando, Ended };
+
 public class GameController : MonoBehaviour {
 
 	[Range (0f, 0.20f)]
@@ -13,8 +15,11 @@ public class GameController : MonoBehaviour {
 	public GameObject uiParado;
 	public GameObject player;
 
+
+    public GameObject enemyGenerator;
+
 	//Enumerador, lista de opciones
-	public enum GameState {Parado, Jugando};
+	
 	//Por defecto el juego está parado
 	public GameState gameState = GameState.Parado;
 
@@ -28,12 +33,16 @@ public class GameController : MonoBehaviour {
 			gameState = GameState.Jugando;
 			uiParado.SetActive (false);
 			player.SendMessage("UpdateState", "PlayerRun");
-
+            enemyGenerator.SendMessage("StartGenerator");
 
 		} else if (gameState == GameState.Jugando) {
 			Parallax ();
 		}
-		}
+     else if (gameState == GameState.Ended) {
+
+           //Algo
+    }
+}
 
 	void Parallax(){
 	

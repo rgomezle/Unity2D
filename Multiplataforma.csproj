@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Script\EnemyController.cs" />
+    <Compile Include="Assets\Script\EnemyGenerator.cs" />
     <Compile Include="Assets\Script\GameController.cs" />
     <Compile Include="Assets\Script\PlayerController.cs" />
   </ItemGroup>

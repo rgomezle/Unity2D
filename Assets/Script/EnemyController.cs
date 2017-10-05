@@ -5,13 +5,31 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour {
 
     public float velocity = 2f;
-	// Use this for initialization
+
+    private Rigidbody2D rbd2;
+
+
+
 	void Start () {
-		
+        rbd2 = GetComponent<Rigidbody2D>();
+
+        rbd2.velocity = Vector2.left * velocity;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Destroyer")
+        {
+
+            Destroy(gameObject);
+        }
+
+    }
+
 }
