@@ -7,38 +7,29 @@ public class EnemyGenerator : MonoBehaviour {
     public GameObject enemyPrefab;
     public float generatorTimer = 1.75f;
 
-	void Start () {
-        
+	void Start () {   
 	}
-
 	void Update () {
-		
 	}
 
     void CreateEnemy(){
         Instantiate(enemyPrefab, transform.position, Quaternion.identity);
     }
 
-    public void StartGenerator()
-    {
+    public void StartGenerator(){
         InvokeRepeating("CreateEnemy", 0F, generatorTimer);
     }
 
-    public void CancelGenerator(bool clean = false)
-    {
+    public void CancelGenerator(bool clean = false){
         CancelInvoke("CreateEnemy");
 
-        if (clean)
-        {
+        if (clean){
 
             Object[] allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
-            foreach (GameObject enemy in allEnemies)
-            {
+            foreach (GameObject enemy in allEnemies){
                 Destroy(enemy);
             }
-
         }
-
     }
 
 

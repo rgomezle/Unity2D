@@ -7,41 +7,82 @@ public class PlayerController : MonoBehaviour {
 	private Animator animator;
     public GameObject game;
     public GameObject enemyGenerator;
+    private AudioSource audioPlayer;
+    public AudioClip jumpClip;
+    public AudioClip dieClip;
+    private float startY;
+    public ParticleSystem dust;
 
-	
-	void Start () {
+
+	//Player inicia con animación de pie
+	void Start (){
 
 		animator = GetComponent<Animator> ();
-	}
+        audioPlayer = GetComponent<AudioSource>();
+        startY = transform.position.y;
+    }
 	
-	// Update is called once per frame
+    //Se actuaiza animación a caminar
 	void Update () {
+
+        bool isGrounded = transform.position.y == startY;
         bool gameJugando = game.GetComponent<GameController>().gameState == GameState.Jugando;
-		if(gameJugando && (Input.GetKeyDown ("up") || Input.GetMouseButtonDown (0))){
-			UpdateState ("PlayerSalta");
+        bool userAction = Input.GetKeyDown("up") || Input.GetMouseButtonDown(0);
+
+
+        if (isGrounded && gameJugando && userAction){
+            UpdateState ("PlayerSalta");
+            //Comprueba que el jugador no esté saltando
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerSalta")){
+                audioPlayer.clip = jumpClip;
+                audioPlayer.Play();
+            }
 		}
 	}
 
+    //Se actualiza estado del jugador
 	public void UpdateState(string state = null){
 
 		if(state != null){
 		
 			animator.Play(state);		
 		}
-			
 	}
 
-
+    //Triger de colisión con el enemigo
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Enemy")
-        {
+        if (other.gameObject.tag == "Enemy"){
+
             UpdateState("PlayerDie");
             game.GetComponent<GameController>().gameState = GameState.Ended;
             enemyGenerator.SendMessage("CancelGenerator", true);
+            game.SendMessage("ResetTimeScale");
+
+            //Audio
+            game.GetComponent<AudioSource>().Stop();
+            audioPlayer.clip = dieClip;
+            audioPlayer.Play();
+
+            DustStop();
 
         }
-
     }
+
+    void GameReady(){
+
+        game.GetComponent<GameController>().gameState = GameState.Ready;
+    }
+
+    void DustPlay(){
+
+        dust.Play();
+    }
+
+    void DustStop(){
+        dust.Stop();
+    }
+
+
 
 }
