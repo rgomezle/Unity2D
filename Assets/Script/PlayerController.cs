@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     private AudioSource audioPlayer;
     public AudioClip jumpClip;
     public AudioClip dieClip;
+    public AudioClip pointClip;
     private float startY;
     public ParticleSystem dust;
 
@@ -65,6 +66,12 @@ public class PlayerController : MonoBehaviour {
             audioPlayer.Play();
 
             DustStop();
+
+        } else if (other.gameObject.tag == "Points"){
+            game.SendMessage("IncreasePoints");
+            
+            audioPlayer.clip = pointClip;
+            audioPlayer.Play();
 
         }
     }

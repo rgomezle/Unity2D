@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyGenerator : MonoBehaviour {
 
     public GameObject enemyPrefab;
-    public float generatorTimer = 1.75f;
+    public float generatorTimer = 2f;
 
 	void Start () {   
 	}

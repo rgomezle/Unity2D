@@ -13,19 +13,23 @@ public class GameController : MonoBehaviour {
 	public RawImage background;
 	public RawImage platform;
 	public GameObject uiParado;
+    public GameObject uiScore;
+    public Text pointsText;
+    public Text recordText;
 	public GameObject player;
     public GameObject enemyGenerator;
 	public GameState gameState = GameState.Parado;
     private AudioSource musicPLayer;
     public float scaleTime = 6f;
     public float scaleInc = .25f;
-
+    private int points = 0;
 
 
 
     //Juego Inicia
     void Start() {
         musicPLayer = GetComponent<AudioSource>();
+        recordText.text = "BEST: " + GetMaxScore().ToString();
 	}
 
     //Juego se Actualiza
@@ -37,7 +41,9 @@ public class GameController : MonoBehaviour {
         if (gameState == GameState.Parado && userAction) {
 			gameState = GameState.Jugando;
 			uiParado.SetActive (false);
-			player.SendMessage("UpdateState", "PlayerRun");
+            uiScore.SetActive(true);
+
+            player.SendMessage("UpdateState", "PlayerRun");
             player.SendMessage("DustPlay");
             enemyGenerator.SendMessage("StartGenerator");
             musicPLayer.Play();
@@ -84,5 +90,32 @@ public class GameController : MonoBehaviour {
         Debug.Log("Ritmo restablecido " + Time.timeScale.ToString());
 
     }
+
+    public void IncreasePoints(){
+
+        //points++;
+        pointsText.text = (++points).ToString();
+
+        if(points >= GetMaxScore())
+        {
+            recordText.text = "BEST: " + points.ToString();
+            SaveScore(points);
+        }
+
+    }
+
+    public int GetMaxScore(){
+
+        return PlayerPrefs.GetInt("Max Points", 0);
+
+    }
+
+    public void SaveScore(int currentPoints){
+
+        PlayerPrefs.SetInt("Max Points", currentPoints);
+
+    }
+
+
 
 }
